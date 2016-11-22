@@ -21,10 +21,11 @@ app.use(webpackDevMiddleware(compiler, {
 }));
 app.use(webpackHotMiddleware(compiler));
 
- app.get('/', (req, res) => {
+app.get('/', (req, res) => {
 	res.sendFile('index.html', { root: path.join(__dirname, '../client') });
 });
 
+// socket IO code:
 io.on('connection', (socket) => {
   console.log('a user connected');
 
@@ -33,6 +34,6 @@ io.on('connection', (socket) => {
   });
  
   socket.on('disconnect', () => {
-    console.log('user disconnected');
+    console.log('a user disconnected');
   });
 });
