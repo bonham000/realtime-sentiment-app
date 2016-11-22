@@ -25,12 +25,25 @@ app.get('/', (req, res) => {
 	res.sendFile('index.html', { root: path.join(__dirname, '../client') });
 });
 
+let currentLikes = {};
+
 // socket IO code:
 io.on('connection', (socket) => {
   console.log('a user connected');
 
+  socket.emit('initialize-likes', currentLikes);
+
   socket.on('tally', () => {
   	io.emit('inc-tally');
+  });
+
+  socket.on('like', (identifier) => {
+    if (identifier in currentLikes) {
+      currentLikes[identifier] = currentLikes[identifier] + 1;
+    } else {
+      currentLikes[identifier] = 1;
+    }
+    io.emit('add-like', (identifier));
   });
  
   socket.on('disconnect', () => {
