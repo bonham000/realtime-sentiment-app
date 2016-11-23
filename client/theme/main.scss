@@ -6,7 +6,7 @@ body {
 }
 
 .article {
-	width: 1000px;
+	width: 850px;
 	border: 1px solid rgba(250,250,250,0.25);
 	padding: 8px 12px;
 	margin: 15px auto;
@@ -15,11 +15,14 @@ body {
 	justify-content: center;
 	text-align: left;
 	.content {
+		width: 500px;
+		margin: 5px auto;
 		padding-right: 12px;
 		padding-left: 12px;
 	}
 	.like {
-		width: 175px;
+		width: 150px;
+		margin: 5px auto;
 		display: flex;
 		align-items: center;
 		.fa {
@@ -32,7 +35,6 @@ body {
 	h2 {
 		border-bottom: 1px solid rgba(250,250,250,0.75);
 		padding-bottom: 25px;
-
 	}
 	p {
 		text-align: left;

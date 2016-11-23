@@ -33,10 +33,6 @@ io.on('connection', (socket) => {
 
   socket.emit('initialize-likes', currentLikes);
 
-  socket.on('tally', () => {
-  	io.emit('inc-tally');
-  });
-
   socket.on('like', (identifier) => {
     if (identifier in currentLikes) {
       currentLikes[identifier] = currentLikes[identifier] + 1;

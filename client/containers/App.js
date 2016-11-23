@@ -14,15 +14,12 @@ export default class App extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			tally: 0,
 			likedArticles: new Map()
 		}
-		this.add = this.add.bind(this);
 		this.likeArticle = this.likeArticle.bind(this);
 		this.unlikeArticle = this.unlikeArticle.bind(this);
 
 		socket.on('initialize-likes', (currentLikes) => {
-			console.log(currentLikes);
 			const setLikes = new Map();
 			for (let articleID in currentLikes) {
 				setLikes.set(articleID, currentLikes[articleID])
@@ -58,10 +55,7 @@ export default class App extends React.Component {
 
 		});
 
-		socket.on('inc-tally', () => { this.setState({ tally: this.state.tally + 1 })});
-
 	}
-	add() { socket.emit('tally') }
 	likeArticle(identifier) { socket.emit('like', identifier) }
 	unlikeArticle(identifier) { socket.emit('unlike', identifier) }
 	render() {
@@ -88,10 +82,6 @@ export default class App extends React.Component {
 		});
 		return (
 			<div>
-				<h1>App Component</h1>
-				{this.state.tally}
-				<br />
-				<button onClick = {this.add}>Add to Tally</button>
 				{renderNews}
 			</div>
 		);
