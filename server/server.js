@@ -45,6 +45,15 @@ io.on('connection', (socket) => {
     }
     io.emit('add-like', (identifier));
   });
+
+  socket.on('unlike', (identifier) => {
+    if (identifier in currentLikes) {
+      if (currentLikes[identifier] > 0) {
+        currentLikes[identifier] = currentLikes[identifier] - 1;
+      }
+    }
+    io.emit('add-unlike', (identifier));
+  });
  
   socket.on('disconnect', () => {
     console.log('a user disconnected');

@@ -19,8 +19,10 @@ export default class App extends React.Component {
 		}
 		this.add = this.add.bind(this);
 		this.likeArticle = this.likeArticle.bind(this);
+		this.unlikeArticle = this.unlikeArticle.bind(this);
 
 		socket.on('initialize-likes', (currentLikes) => {
+			console.log(currentLikes);
 			const setLikes = new Map();
 			for (let articleID in currentLikes) {
 				setLikes.set(articleID, currentLikes[articleID])
@@ -43,21 +45,44 @@ export default class App extends React.Component {
 
 		});
 
+		socket.on('add-unlike', (identifier) => {
+			const { likedArticles } = this.state;
+			
+			if (likedArticles.get(identifier) > 0) {
+				likedArticles.set(identifier, likedArticles.get(identifier) - 1);
+			}
+
+			this.setState({
+				likedArticles
+			});
+
+		});
+
 		socket.on('inc-tally', () => { this.setState({ tally: this.state.tally + 1 })});
 
 	}
 	add() { socket.emit('tally') }
 	likeArticle(identifier) { socket.emit('like', identifier) }
+	unlikeArticle(identifier) { socket.emit('unlike', identifier) }
 	render() {
 		const { likedArticles } = this.state;
 		const renderNews = this.props.news.articles.map( (article, idx) => {
 			return (
 				<div key = {idx} className = 'article'>
-					<h1>{article.title}</h1>
-					<p>By: {article.author}</p>
-					<p>{article.description}</p>
-					<button onClick = {this.likeArticle.bind(this, article.publishedAt)}>I like this!</button>
-					<h2>Current Likes = {likedArticles.get(article.publishedAt) ? likedArticles.get(article.publishedAt) : 0}</h2>
+
+					<div className = 'like'>
+						<i onClick = {this.unlikeArticle.bind(this, article.publishedAt)} className = "fa fa-thumbs-down" aria-hidden = "true"></i>
+					</div>
+					<div className = 'content'>
+						<h1>{article.title}</h1>
+						<h2>By: {article.author}</h2>
+						<p>{article.description}</p>
+						<h3>Current Likes = {likedArticles.get(article.publishedAt) ? likedArticles.get(article.publishedAt) : 0}</h3>
+					</div>
+					<div className = 'like'>
+						<i onClick = {this.likeArticle.bind(this, article.publishedAt)} className = "fa fa-thumbs-up" aria-hidden = "true"></i>
+					</div>
+
 				</div>
 			);
 		});
